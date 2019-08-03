@@ -1,5 +1,4 @@
 import { IStorage } from '../iStorage'
-import * as Bluebird from 'bluebird'
 
 import * as Redis from 'ioredis'
 
@@ -7,7 +6,10 @@ export class RedisStorage implements IStorage {
   private client: any
 
   constructor(private host: string, private port: number) {
-    this.client = new Redis(this.port, this.host)
+    this.client = new Redis({
+      port: this.port,
+      host: this.host
+    })
   }
 
   public async getItem<T>(key: string): Promise<T> {
@@ -28,12 +30,12 @@ export class RedisStorage implements IStorage {
     return this.client.set(key, content, 'EX', ttl)
   }
 
-  clearItem(key: string): Promise<void> {
-    return this.client.del(key)
+  public async clearItem(key: string): Promise<void> {
+    return await this.client.del(key)
   }
 
   public async clear(): Promise<void> {
-    return this.client.flushdbAsync()
+    return this.client.flushdb()
   }
 
   public prefixClear (prefix: string) {

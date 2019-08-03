@@ -18,11 +18,11 @@ export interface ICacheInvalidateParams {
   cacheKeys?: [ string ]
 }
 
-export const invalidateCache = (cacheStorage: IStorage, cacheKey, args, prefix: boolean = false) => {
+export const invalidateCache = async (cacheStorage: IStorage, cacheKey, args, prefix: boolean = false) => {
     if (prefix) {
-      cacheStorage.prefixClear(cacheKey)
+      await cacheStorage.prefixClear(cacheKey)
     } else {
-      cacheStorage.clearItem(composeCacheKey(args, { cacheKey, type: 'normal' }))
+      await cacheStorage.clearItem(composeCacheKey(args, { cacheKey, type: 'normal' }))
     }
 }
 
