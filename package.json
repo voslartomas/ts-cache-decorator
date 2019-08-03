@@ -1,0 +1,41 @@
+{
+  "name": "@t.voslar/ts-cache-decorator",
+  "version": "1.1.0",
+  "description": "Cache decorators with redis storage strategy.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "mocha --opts test/mocha.opts",
+    "build": "tsc -p .",
+    "dev": "tsc -p . -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voslartomas/ts-cache-decorators.git"
+  },
+  "keywords": [
+    "cache",
+    "decorator",
+    "typescript",
+    "redis"
+  ],
+  "devDependencies": {
+    "@types/bluebird": "^3.5.24",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.9",
+    "@types/redis": "^2.8.7",
+    "@types/sinon": "^5.0.6",
+    "chai": "^4.2.0",
+    "jsdom": "^13.0.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^5.2.0",
+    "sinon": "^7.1.1",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.3",
+    "hasha": "^3.0.0",
+    "redis": "^2.8.0"
+  }
+}

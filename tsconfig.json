@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "lib": [
+      "dom",
+      "es2017"
+    ],
+    "target": "es2017",
+    "allowJs": false,
+    "sourceMap": true,
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "docs",
+    "coverage",
+    "aws",
+    ".nyc_output",
+    "migrations"
+  ]
+}
