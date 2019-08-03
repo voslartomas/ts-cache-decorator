@@ -18,8 +18,12 @@ export interface ICacheInvalidateParams {
   cacheKeys?: [ string ]
 }
 
-export const invalidateCache = (cacheStorage: IStorage, cacheKey, args) => {
-    cacheStorage.clearItem(composeCacheKey(args, { cacheKey, type: 'normal' }))
+export const invalidateCache = (cacheStorage: IStorage, cacheKey, args, prefix: boolean = false) => {
+    if (prefix) {
+      cacheStorage.prefixClear(cacheKey)
+    } else {
+      cacheStorage.clearItem(composeCacheKey(args, { cacheKey, type: 'normal' }))
+    }
 }
 
 export function Cache (cachingStorage: IStorage, params: ICacheParams) {
@@ -29,12 +33,13 @@ export function Cache (cachingStorage: IStorage, params: ICacheParams) {
         const localParams = { ...defaults, ...params }
         let result
 
+        let cacheKey
         if (params.filterParams) {
-          args = args.filter(arg => params.filterParams.includes(arg))
+          cacheKey = composeCacheKey(args.filter(arg => params.filterParams.includes(arg)), localParams)
+        } else {
+          cacheKey = composeCacheKey(args, localParams)
         }
-        console.log(args)
 
-        const cacheKey = composeCacheKey(args, localParams)
         result = await cachingStorage.getItem(cacheKey)
 
         if (!result) {

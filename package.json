@@ -1,6 +1,6 @@
 {
   "name": "@t.voslar/ts-cache-decorator",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Cache decorators with redis storage strategy.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,7 +23,6 @@
     "@types/bluebird": "^3.5.24",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.9",
-    "@types/redis": "^2.8.7",
     "@types/sinon": "^5.0.6",
     "chai": "^4.2.0",
     "jsdom": "^13.0.0",
@@ -34,8 +33,9 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
+    "@types/ioredis": "^4.0.13",
     "bluebird": "^3.5.3",
     "hasha": "^3.0.0",
-    "redis": "^2.8.0"
+    "ioredis": "^4.14.0"
   }
 }
