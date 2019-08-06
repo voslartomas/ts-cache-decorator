@@ -43,24 +43,34 @@ export class RedisStorage implements IStorage {
     let pipeline = this.client.pipeline()
 
     let localKeys = [];
-    stream.on('data', function (resultKeys) {
-      for (var i = 0; i < resultKeys.length; i++) {
-        localKeys.push(resultKeys[i])
-        pipeline.del(resultKeys[i])
-      }
+    stream.on('data', (resultKeys) => {
+      try {
+        for (var i = 0; i < resultKeys.length; i++) {
+          localKeys.push(resultKeys[i])
+          pipeline.del(resultKeys[i])
+        }
 
-      if(localKeys.length > 100){
-        pipeline.exec(()=>{ console.log("one batch delete complete")} )
-        localKeys=[]
-        pipeline = this.client.pipeline()
+        if(localKeys.length > 100) {
+          pipeline.exec(()=>{ console.log("one batch delete complete")} )
+          localKeys=[]
+          pipeline = this.client.pipeline()
+        }
+      } catch (err) {
+        console.log(err, 'Redis failed - prefixClear')
       }
     })
 
-    stream.on('end', function(){
-      pipeline.exec(()=>{console.log("final batch delete complete")})
+    stream.on('end', () => {
+      try {
+        pipeline.exec(() => {
+          console.log("final batch delete complete")
+        })
+      } catch (err) {
+        console.log(err, 'Redis failed - end prefixClear')
+      }
     })
 
-    stream.on('error', function(err){
+    stream.on('error', (err) => {
       console.log("error", err)
     })
   }
