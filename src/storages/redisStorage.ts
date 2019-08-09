@@ -21,13 +21,18 @@ export class RedisStorage implements IStorage {
     return cached
   }
 
-  public async setItem(key: string, content: any, ttl: number): Promise<void> {
+  public async setItem(key: string, content: any, ttl?: number): Promise<void> {
     if (typeof content === 'object') {
       content = JSON.stringify(content)
     } else if (content === undefined) {
       return this.client.del(key)
     }
-    return this.client.set(key, content, 'EX', ttl)
+
+    if (ttl) {
+      return this.client.set(key, content, 'EX', ttl)
+    } else {
+      return this.client.set(key, content)
+    }
   }
 
   public async clearItem(key: string): Promise<void> {
