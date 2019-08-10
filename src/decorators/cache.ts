@@ -56,5 +56,5 @@ export function Cache (cachingStorage: IStorage, params: ICacheParams) {
 const composeCacheKey = (args, params: ICacheParams) => {
   args = Array.from(args)
 
-  return params.cacheKey + hasha(JSON.stringify(args))
+  return params.cacheKey + JSON.stringify(args)
 }
