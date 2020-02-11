@@ -56,7 +56,7 @@ export class RedisStorage implements IStorage {
         }
 
         if(localKeys.length > 100) {
-          pipeline.exec(()=>{ console.log("one batch delete complete")} )
+          pipeline.exec(()=>{} )
           localKeys=[]
           pipeline = this.client.pipeline()
         }
@@ -68,7 +68,6 @@ export class RedisStorage implements IStorage {
     stream.on('end', () => {
       try {
         pipeline.exec(() => {
-          console.log("final batch delete complete")
         })
       } catch (err) {
         console.log(err, 'Redis failed - end prefixClear')
