@@ -1,7 +1,7 @@
 # ts-cache-decorators
 
 
-## Instal
+## Install
 ```
 npm i @t.voslar/ts-cache-decorator
 ```
