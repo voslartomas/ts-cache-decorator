@@ -5,24 +5,23 @@ const SYMBOL_KEY = Symbol.for("ts.cache.decorator.lib")
 var globalSymbols = Object.getOwnPropertySymbols(global)
 var hasFoo = (globalSymbols.indexOf(SYMBOL_KEY) > -1)
 
-if (!hasFoo) {
-  class CacheManager {
-    private client: IStorage
+class CacheManager {
+  private client: IStorage
 
-    setClient = (client: IStorage) => {
-      this.client = client
-    }
-
-    getClient = () => {
-      return this.client
-    }
+  setClient = (client: IStorage) => {
+    this.client = client
   }
 
+  getClient = () => {
+    return this.client
+  }
+}
+
+if (!hasFoo) {
   global[SYMBOL_KEY] = new CacheManager()
 }
 
-var singleton = {}
-
+var singleton = {} as { instance: CacheManager }
 Object.defineProperty(singleton, "instance", {
   get: function(){
     return global[SYMBOL_KEY]
@@ -31,4 +30,4 @@ Object.defineProperty(singleton, "instance", {
 
 Object.freeze(singleton)
 
-export default singleton as any
+export default singleton
