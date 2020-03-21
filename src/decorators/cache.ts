@@ -1,14 +1,14 @@
 import CacheManager from "../cacheManager"
 
 export interface ICacheParams {
-  type: 'request' | 'normal'
+  type: 'normal'
   cacheKey: string
   filterParams?: string[]
   ttl?: number
 }
 
 const defaults: ICacheParams = {
-  type: 'request',
+  type: 'normal',
   cacheKey: undefined
 }
 
@@ -17,7 +17,7 @@ export interface ICacheInvalidateParams {
   cacheKeys?: [ string ]
 }
 
-export const invalidateCache = async (cacheKey: string, args: {}, prefix: boolean = false) => {
+export const invalidateCache = async (cacheKey: string, args: Iterable<string>, prefix: boolean = false) => {
     if (prefix) {
       await CacheManager.instance.getClient().prefixClear(cacheKey)
     } else {
@@ -30,9 +30,9 @@ export function Cache (params: ICacheParams) {
     return {
       async value ( ... args: any[]): Promise<any> {
         const localParams = { ...defaults, ...params }
-        let result
+        let result: any
 
-        let cacheKey
+        let cacheKey: string
         if (params.filterParams) {
           cacheKey = composeCacheKey(args.filter(arg => params.filterParams.includes(arg)), localParams)
         } else {
@@ -52,7 +52,7 @@ export function Cache (params: ICacheParams) {
   }
 }
 
-const composeCacheKey = (args, params: ICacheParams) => {
+const composeCacheKey = (args: Iterable<string>, params: ICacheParams) => {
   args = Array.from(args)
 
   return params.cacheKey + JSON.stringify(args)

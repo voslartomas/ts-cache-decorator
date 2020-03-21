@@ -25,6 +25,7 @@ async getUser (): Promise<User> {
 
 | Param | Value | Description |
 | ---- | ---- | --- |
-| type | 'normal' \|\| 'request' | Type of cache. |
+| type | 'normal' | Type of cache. |
 | cacheKey | string | Caching key. |
 | ttl  | number  | Time to live.  |
+| filterParams  | string[]  | Parameters which should not be inside cache key.  |
