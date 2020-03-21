@@ -1,6 +1,6 @@
 {
   "name": "@t.voslar/ts-cache-decorator",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Cache decorators with redis storage strategy.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
