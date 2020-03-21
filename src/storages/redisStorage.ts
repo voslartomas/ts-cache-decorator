@@ -1,15 +1,12 @@
 import { IStorage } from '../iStorage'
 
-import * as Redis from 'ioredis'
+import IORedis from 'ioredis'
 
 export class RedisStorage implements IStorage {
   private client: any
 
   constructor(private host: string, private port: number) {
-    this.client = new Redis({
-      port: this.port,
-      host: this.host
-    })
+    this.client = new IORedis(this.port, this.host)
   }
 
   public async getItem<T>(key: string): Promise<T> {
@@ -43,7 +40,7 @@ export class RedisStorage implements IStorage {
     return this.client.flushdb()
   }
 
-  public prefixClear (prefix: string) {
+  public async prefixClear (prefix: string): Promise<void> {
     const stream = this.client.scanStream({ match: `${prefix}*`,count: 100 })
     let pipeline = this.client.pipeline()
 

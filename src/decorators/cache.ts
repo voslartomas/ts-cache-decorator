@@ -1,5 +1,4 @@
-import * as hasha from 'hasha'
-import { IStorage } from '../iStorage'
+import CacheManager from "../cacheManager"
 
 export interface ICacheParams {
   type: 'request' | 'normal'
@@ -18,15 +17,15 @@ export interface ICacheInvalidateParams {
   cacheKeys?: [ string ]
 }
 
-export const invalidateCache = async (cacheStorage: IStorage, cacheKey, args, prefix: boolean = false) => {
+export const invalidateCache = async (cacheKey: string, args: {}, prefix: boolean = false) => {
     if (prefix) {
-      await cacheStorage.prefixClear(cacheKey)
+      await CacheManager.instance.getClient().prefixClear(cacheKey)
     } else {
-      await cacheStorage.clearItem(composeCacheKey(args, { cacheKey, type: 'normal' }))
+      await CacheManager.instance.getClient().clearItem(composeCacheKey(args, { cacheKey, type: 'normal' }))
     }
 }
 
-export function Cache (cachingStorage: IStorage, params: ICacheParams) {
+export function Cache (params: ICacheParams) {
   return (target: Object, propertyKey: string | symbol, descriptor) => {
     return {
       async value ( ... args: any[]): Promise<any> {
@@ -40,11 +39,11 @@ export function Cache (cachingStorage: IStorage, params: ICacheParams) {
           cacheKey = composeCacheKey(args, localParams)
         }
 
-        result = await cachingStorage.getItem(cacheKey)
+        result = await CacheManager.instance.getClient().getItem(cacheKey)
 
         if (!result) {
           result = await descriptor.value.apply(this, args)
-          await cachingStorage.setItem(cacheKey, result, params.ttl || 60)
+          await CacheManager.instance.getClient().setItem(cacheKey, result, params.ttl || 60)
         }
 
         return result

@@ -6,6 +6,7 @@
       "dom",
       "es2017"
     ],
+    "esModuleInterop": true,
     "target": "es2017",
     "allowJs": false,
     "sourceMap": true,
