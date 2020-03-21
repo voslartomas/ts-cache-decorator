@@ -1,12 +1,12 @@
 {
   "name": "@t.voslar/ts-cache-decorator",
-  "version": "2.1.4",
+  "version": "2.2.0",
   "description": "Cache decorators with different strategies.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "mocha --opts test/mocha.opts",
-    "build": "tsc -p .",
+    "build": "rm -rf dist && tsc -p .",
     "dev": "tsc -p . -w"
   },
   "repository": {
