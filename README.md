@@ -29,6 +29,33 @@ If you need to filter some parameters you can use filterParams param.
 async getUser (userId: string, otherParam: boolean): Promise<User> {
 ```
 
+### Concurrent misses
+
+Calls that miss the same key at the same time are collapsed into one: the first
+caller runs the method, the rest await its result. Without that, a burst of
+traffic against a cold or just-expired key runs the underlying work once per
+caller - the cache only starts absorbing load after the first call has finished
+writing, which is the opposite of what you want at exactly that moment.
+
+```typescript
+// getUser runs once, not five times
+await Promise.all([
+  service.getUser('1'),
+  service.getUser('1'),
+  service.getUser('1'),
+  service.getUser('1'),
+  service.getUser('1')
+])
+```
+
+This is per-process. It deduplicates within one Node instance, not across a
+cluster, so with N replicas the worst case is N concurrent computations rather
+than N x (concurrent requests per replica). Going further needs a distributed
+lock, which is a heavier thing to put in the read path of a cache.
+
+A failed call is not cached and does not wedge the key - every waiter on that
+call rejects, and the next caller retries.
+
 ### Cache API
 
 | Param | Value | Description |
