@@ -5,6 +5,18 @@
       "dom",
       "es2017"
     ],
+    // Without this, tsc pulls every @types/* package in node_modules into the
+    // program whether the code imports it or not. An @types package written for
+    // a newer TypeScript than the one pinned here then fails the build with
+    // syntax errors that skipLibCheck cannot suppress, because they are parse
+    // errors rather than type errors. Types reached through a real import (such
+    // as ioredis) still resolve normally.
+    // mocha is here for the specs, which ts-node compiles against this same
+    // config; it contributes globals only and emits nothing into dist.
+    "types": [
+      "node",
+      "mocha"
+    ],
     "esModuleInterop": true,
     "target": "es2017",
     "allowJs": false,
